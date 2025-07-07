@@ -186,6 +186,18 @@ function displayCurrentQuestion() {
     answerContainer.classList.remove('correct', 'incorrect');
     checkBtn.classList.remove('hidden');
     nextBtn.classList.add('hidden');
+    
+    // Render MathJax after content is inserted
+    renderMathJax();
+}
+
+// Function to render MathJax
+function renderMathJax() {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([questionContainer, answerContainer]).catch(function (err) {
+            console.log('MathJax rendering error:', err.message);
+        });
+    }
 }
 
 checkBtn.addEventListener('click', () => {
@@ -219,6 +231,9 @@ checkBtn.addEventListener('click', () => {
 
     checkBtn.classList.add('hidden');
     nextBtn.classList.remove('hidden');
+    
+    // Render MathJax after feedback is inserted
+    renderMathJax();
 });
 
 nextBtn.addEventListener('click', () => {
@@ -280,20 +295,54 @@ restartBtn.addEventListener('click', () => {
     progressBar.style.width = '0%';
     examFile.value = '';
     generatedExamSelect.value = '';
+    aiResultInput.value = '';
+    charCounter.textContent = '0 characters';
+    loadAndSaveBtn.disabled = true;
+    loadAndSaveBtn.style.opacity = '0.6';
 });
 
 // Template copy functionality
 const copyTemplateBtn = document.getElementById('copyTemplateBtn');
 const openGeminiBtn = document.getElementById('openGeminiBtn');
+const subjectInput = document.getElementById('subjectInput');
+const aiResultInput = document.getElementById('aiResultInput');
+const loadAndSaveBtn = document.getElementById('loadAndSaveBtn');
+const charCounter = document.getElementById('charCounter');
+
+// Character counter for AI result input
+aiResultInput.addEventListener('input', () => {
+    const charCount = aiResultInput.value.length;
+    charCounter.textContent = `${charCount} characters`;
+    
+    // Update load button state based on content
+    if (charCount > 0) {
+        loadAndSaveBtn.disabled = false;
+        loadAndSaveBtn.style.opacity = '1';
+    } else {
+        loadAndSaveBtn.disabled = true;
+        loadAndSaveBtn.style.opacity = '0.6';
+    }
+});
+
+// Initialize button state
+loadAndSaveBtn.disabled = true;
+loadAndSaveBtn.style.opacity = '0.6';
+
 const promptTemplate = `### Prompt for Generating Compatible Mock Exams
 
-Please generate a mock exam on the topic of **\`[Your Topic Here]\`**. The exam must be structured in a specific Markdown format to be compatible with my parsing script.
+Please generate a mock exam on the topic of **\`[SUBJECT_PLACEHOLDER]\`**. The exam must be structured in a specific Markdown format to be compatible with my parsing script.
 
 The entire output must be a single block of Markdown text. Please ensure the final output can be saved as a \`.md\` file.
 
+**Mathematical Notation Support:**
+*   The platform supports LaTeX-style mathematical notation using MathJax.
+*   For inline math, use \`$...$\` (e.g., \`$x^2 + y^2 = r^2$\`)
+*   For display math, use \`$$...$$\` (e.g., \`$$\\frac{a}{b} = \\frac{c}{d}$$\`)
+*   Common symbols: \`\\alpha, \\beta, \\gamma, \\pi, \\sigma, \\sum, \\int, \\frac{a}{b}, \\sqrt{x}, x^2, x_1\`
+
 **Formatting Rules:**
 
-1.  **Main Title:** The exam must begin with a level 1 heading for the title, like \`# [Your Topic Here] Mock Exam\`.
+1.  **Main Title:** The exam must begin with a level 1 heading for the title, like \`# [SUBJECT_PLACEHOLDER] Mock Exam\`.
 
 2.  **Question Sections:**
     *   The exam should have exactly 3 sections: Section A, Section B, and Section C.
@@ -302,6 +351,7 @@ The entire output must be a single block of Markdown text. Please ensure the fin
     *   **ALL questions must be multiple choice with exactly 4 options (a, b, c, d).**
     *   Each question must be numbered (e.g., \`1.\`, \`2.\`, \`3.\`, \`4.\`, \`5.\`).
     *   Multiple-choice options must be on new lines, starting with a letter and parenthesis followed by a space (e.g., \`a) Option text\`, \`b) Option text\`).
+    *   **Use mathematical notation where appropriate** (e.g., \`What is the value of $x$ in $2x + 3 = 7$?\`)
 
 3.  **Answer Separator:**
     *   After all the questions and before the answers, there **must** be a \`---\` horizontal rule on its own line.
@@ -311,6 +361,7 @@ The entire output must be a single block of Markdown text. Please ensure the fin
     *   The answers should be organized in sections matching the question sections (e.g., \`## Section A\`, \`## Section B\`, \`## Section C\`).
     *   Each answer **must** be on a single line and follow this exact format:
         \`[Question Number].  [Correct Option Letter]) [Answer Text] || **Explanation:** [Detailed explanation of why this answer is correct]\`
+    *   **Include mathematical notation in explanations** where relevant.
 
 **Crucial Formatting Details:**
 
@@ -318,153 +369,162 @@ The entire output must be a single block of Markdown text. Please ensure the fin
 *   The explanation must begin with \`**Explanation:**\` (including the bold markdown).
 *   Each answer must start with the question number, followed by the correct option letter and closing parenthesis.
 *   Ensure each section has exactly 5 questions and 5 corresponding answers.
+*   Mathematical expressions will be automatically rendered using MathJax.
 
 ---
 
-### Example of the Required Format:
+### Example of the Required Format (Mathematics):
 
 \`\`\`markdown
-# Biology Mock Exam
+# Mathematics Mock Exam
 
 ## Section A: Multiple Choice (20 Marks)
 
-1.  Which of the following is the basic unit of life?
-    a) Atom
-    b) Cell
-    c) Tissue
-    d) Organ
+1.  What is the value of $x$ in the equation $2x + 3 = 7$?
+    a) $x = 1$
+    b) $x = 2$
+    c) $x = 3$
+    d) $x = 4$
 
-2.  What is the process by which plants make their own food?
-    a) Respiration
-    b) Photosynthesis
-    c) Digestion
-    d) Excretion
+2.  What is the derivative of $f(x) = x^2 + 3x - 1$?
+    a) $f'(x) = 2x + 3$
+    b) $f'(x) = x + 3$
+    c) $f'(x) = 2x - 1$
+    d) $f'(x) = x^2 + 3$
 
-3.  What is the powerhouse of the cell?
-    a) Nucleus
-    b) Ribosome
-    c) Mitochondria
-    d) Endoplasmic reticulum
+3.  What is the area of a circle with radius $r$?
+    a) $A = 2\\pi r$
+    b) $A = \\pi r^2$
+    c) $A = \\pi r$
+    d) $A = 2\\pi r^2$
 
-4.  Which blood type is considered the universal donor?
-    a) A
-    b) B
-    c) AB
-    d) O
+4.  Solve for $y$: $\\frac{y}{3} + 2 = 5$
+    a) $y = 6$
+    b) $y = 9$
+    c) $y = 12$
+    d) $y = 15$
 
-5.  What is the largest organ in the human body?
-    a) Brain
-    b) Liver
-    c) Heart
-    d) Skin
+5.  What is $\\sqrt{25}$?
+    a) $3$
+    b) $4$
+    c) $5$
+    d) $6$
 
 ## Section B: Multiple Choice (20 Marks)
 
-6.  What is the chemical symbol for water?
-    a) H2O
-    b) CO2
-    c) NaCl
-    d) O2
+6.  What is the slope of the line passing through points $(1, 2)$ and $(3, 8)$?
+    a) $m = 2$
+    b) $m = 3$
+    c) $m = 4$
+    d) $m = 6$
 
-7.  Which part of the plant conducts photosynthesis?
-    a) Root
-    b) Stem
-    c) Leaf
-    d) Flower
+7.  What is $\\sin(30°)$?
+    a) $\\frac{1}{2}$
+    b) $\\frac{\\sqrt{2}}{2}$
+    c) $\\frac{\\sqrt{3}}{2}$
+    d) $1$
 
-8.  What is the basic unit of heredity?
-    a) Chromosome
-    b) Gene
-    c) DNA
-    d) RNA
+8.  What is the quadratic formula?
+    a) $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+    b) $x = \\frac{-b \\pm \\sqrt{b^2 + 4ac}}{2a}$
+    c) $x = \\frac{b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+    d) $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{a}$
 
-9.  Which organ system is responsible for transporting nutrients?
-    a) Digestive system
-    b) Respiratory system
-    c) Circulatory system
-    d) Nervous system
+9.  What is $\\log_{10}(100)$?
+    a) $1$
+    b) $2$
+    c) $10$
+    d) $100$
 
-10. What is the process of cell division called?
-    a) Mitosis
-    b) Meiosis
-    c) Fertilization
-    d) Mutation
+10. What is the integral of $f(x) = 2x$?
+    a) $F(x) = x^2 + C$
+    b) $F(x) = 2x^2 + C$
+    c) $F(x) = x + C$
+    d) $F(x) = 2 + C$
 
 ## Section C: Multiple Choice (20 Marks)
 
-11. Which type of blood cell fights infection?
-    a) Red blood cells
-    b) White blood cells
-    c) Platelets
-    d) Plasma
+11. What is the distance between points $(0, 0)$ and $(3, 4)$?
+    a) $d = 5$
+    b) $d = 7$
+    c) $d = \\sqrt{7}$
+    d) $d = \\sqrt{25}$
 
-12. What is the main function of the kidneys?
-    a) Digestion
-    b) Circulation
-    c) Filtration
-    d) Respiration
+12. What is $e^{\\ln(5)}$?
+    a) $1$
+    b) $5$
+    c) $e$
+    d) $\\ln(5)$
 
-13. Which vitamin is produced when skin is exposed to sunlight?
-    a) Vitamin A
-    b) Vitamin B
-    c) Vitamin C
-    d) Vitamin D
+13. What is the sum of the first $n$ natural numbers?
+    a) $S = n(n+1)$
+    b) $S = \\frac{n(n+1)}{2}$
+    c) $S = \\frac{n(n-1)}{2}$
+    d) $S = n^2$
 
-14. What is the smallest unit of an element?
-    a) Molecule
-    b) Atom
-    c) Ion
-    d) Compound
+14. What is $\\cos(0°)$?
+    a) $0$
+    b) $\\frac{1}{2}$
+    c) $\\frac{\\sqrt{3}}{2}$
+    d) $1$
 
-15. Which gas do plants release during photosynthesis?
-    a) Carbon dioxide
-    b) Nitrogen
-    c) Oxygen
-    d) Hydrogen
+15. What is the determinant of the matrix $\\begin{pmatrix} 2 & 1 \\\\ 3 & 4 \\end{pmatrix}$?
+    a) $5$
+    b) $8$
+    c) $11$
+    d) $-5$
 
 ---
 
 # Answers
 
 ## Section A
-1.  b) Cell || **Explanation:** The cell is the basic structural and functional unit of all living organisms.
-2.  b) Photosynthesis || **Explanation:** Photosynthesis is the process by which plants convert light energy into chemical energy (glucose) using carbon dioxide and water.
-3.  c) Mitochondria || **Explanation:** Mitochondria are known as the powerhouse of the cell because they generate most of the cell's ATP (energy).
-4.  d) O || **Explanation:** Type O blood is considered the universal donor because it lacks A and B antigens, making it compatible with all blood types.
-5.  d) Skin || **Explanation:** The skin is the largest organ in the human body, covering the entire external surface.
+1.  b) $x = 2$ || **Explanation:** Solving $2x + 3 = 7$: subtract 3 from both sides to get $2x = 4$, then divide by 2 to get $x = 2$.
+2.  a) $f'(x) = 2x + 3$ || **Explanation:** Using the power rule: the derivative of $x^2$ is $2x$, the derivative of $3x$ is $3$, and the derivative of a constant is $0$.
+3.  b) $A = \\pi r^2$ || **Explanation:** The area of a circle is given by the formula $A = \\pi r^2$, where $r$ is the radius.
+4.  b) $y = 9$ || **Explanation:** Solving $\\frac{y}{3} + 2 = 5$: subtract 2 from both sides to get $\\frac{y}{3} = 3$, then multiply by 3 to get $y = 9$.
+5.  c) $5$ || **Explanation:** $\\sqrt{25} = 5$ because $5^2 = 25$.
 
 ## Section B
-6.  a) H2O || **Explanation:** Water is composed of two hydrogen atoms and one oxygen atom, hence H2O.
-7.  c) Leaf || **Explanation:** Leaves contain chloroplasts with chlorophyll, which are responsible for photosynthesis.
-8.  b) Gene || **Explanation:** A gene is the basic unit of heredity that carries genetic information from parents to offspring.
-9.  c) Circulatory system || **Explanation:** The circulatory system, including the heart and blood vessels, transports nutrients, oxygen, and waste products throughout the body.
-10. a) Mitosis || **Explanation:** Mitosis is the process of cell division that produces two identical diploid cells from one parent cell.
+6.  b) $m = 3$ || **Explanation:** Using the slope formula $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{8 - 2}{3 - 1} = \\frac{6}{2} = 3$.
+7.  a) $\\frac{1}{2}$ || **Explanation:** $\\sin(30°) = \\frac{1}{2}$ is a standard trigonometric value.
+8.  a) $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$ || **Explanation:** This is the standard quadratic formula for solving $ax^2 + bx + c = 0$.
+9.  b) $2$ || **Explanation:** $\\log_{10}(100) = 2$ because $10^2 = 100$.
+10. a) $F(x) = x^2 + C$ || **Explanation:** The integral of $2x$ is $x^2 + C$ using the power rule for integration.
 
 ## Section C
-11. b) White blood cells || **Explanation:** White blood cells (leukocytes) are part of the immune system and help fight infections and diseases.
-12. c) Filtration || **Explanation:** The kidneys filter waste products and excess water from the blood to produce urine.
-13. d) Vitamin D || **Explanation:** Vitamin D is synthesized in the skin when it is exposed to ultraviolet B (UVB) radiation from sunlight.
-14. b) Atom || **Explanation:** An atom is the smallest unit of an element that retains the chemical properties of that element.
-15. c) Oxygen || **Explanation:** During photosynthesis, plants release oxygen as a byproduct of converting carbon dioxide and water into glucose.
+11. a) $d = 5$ || **Explanation:** Using the distance formula: $d = \\sqrt{(3-0)^2 + (4-0)^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$.
+12. b) $5$ || **Explanation:** $e^{\\ln(5)} = 5$ because the exponential and natural logarithm functions are inverses.
+13. b) $S = \\frac{n(n+1)}{2}$ || **Explanation:** This is the formula for the sum of the first $n$ natural numbers.
+14. d) $1$ || **Explanation:** $\\cos(0°) = 1$ is a standard trigonometric value.
+15. a) $5$ || **Explanation:** For a 2×2 matrix $\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$, the determinant is $ad - bc = (2)(4) - (1)(3) = 8 - 3 = 5$.
 \`\`\`
 
 **Instructions for Use:**
 1. Copy this entire prompt
-2. Replace \`[Your Topic Here]\` with your desired subject
-3. Paste into ChatGPT, Claude, or any AI assistant
-4. Save the generated exam as a .md file
-5. Upload to the exam platform
-IF PROMPT WAS JUST COPY AND PASTED WITHOUT INFORMATION CHANGED LIKE YOUR TOPIC, ASK THE USER FIRST THEN PROCEED.
+2. Paste into ChatGPT, Claude, or any AI assistant
+3. Save the generated exam as a .md file
+4. Upload to the exam platform
 
-**Note:** This format ensures 100% compatibility with the exam platform's parsing system.`;
+**Note:** This format ensures 100% compatibility with the exam platform's parsing system, and mathematical notation will be automatically rendered using MathJax.`;
 
 copyTemplateBtn.addEventListener('click', async () => {
     try {
-        await navigator.clipboard.writeText(promptTemplate);
+        // Get the subject from the input field
+        const subject = subjectInput.value.trim();
         
-        // Show success feedback
+        // Use the subject if provided, otherwise use the placeholder
+        const finalSubject = subject || '[Your Topic Here]';
+        
+        // Replace the placeholder with the actual subject
+        const customizedTemplate = promptTemplate.replace(/\[SUBJECT_PLACEHOLDER\]/g, finalSubject);
+        
+        await navigator.clipboard.writeText(customizedTemplate);
+        
+        // Show success feedback with subject name
         const originalText = copyTemplateBtn.textContent;
-        copyTemplateBtn.textContent = '✅ Copied!';
+        const feedbackText = subject ? `✅ Copied for ${subject}!` : '✅ Copied!';
+        copyTemplateBtn.textContent = feedbackText;
         copyTemplateBtn.style.background = 'var(--gradient-secondary)';
         
         setTimeout(() => {
@@ -491,6 +551,73 @@ openGeminiBtn.addEventListener('click', () => {
         openGeminiBtn.textContent = originalText;
     }, 2000);
 });
+
+// Load and Save functionality
+loadAndSaveBtn.addEventListener('click', () => {
+    const aiContent = aiResultInput.value.trim();
+    
+    if (!aiContent) {
+        alert('Please paste AI-generated exam content first.');
+        return;
+    }
+    
+    try {
+        // Show loading indicator
+        const originalText = loadAndSaveBtn.textContent;
+        loadAndSaveBtn.textContent = '⏳ Processing...';
+        loadAndSaveBtn.disabled = true;
+        
+        // Parse the AI content
+        const [parsedQuestions, parsedAnswers] = parseMarkdown(aiContent);
+        
+        if (parsedQuestions.length === 0) {
+            throw new Error('No valid questions found. Please check the format.');
+        }
+        
+        // Generate filename based on subject or use default
+        const subject = subjectInput.value.trim() || 'Custom';
+        const filename = `${subject.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_exam.md`;
+        
+        // Download the file
+        downloadMarkdownFile(aiContent, filename);
+        
+        // Load the exam
+        questions = parsedQuestions;
+        answers = parsedAnswers;
+        
+        // Start the exam
+        initialView.classList.add('hidden');
+        examArea.classList.remove('hidden');
+        startExam();
+        
+    } catch (error) {
+        console.error('Error processing AI content:', error);
+        alert('Error processing exam content: ' + error.message);
+    } finally {
+        // Restore button state
+        loadAndSaveBtn.textContent = originalText;
+        loadAndSaveBtn.disabled = false;
+    }
+});
+
+// Function to download markdown file
+function downloadMarkdownFile(content, filename) {
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    // Show success message
+    const subject = subjectInput.value.trim() || 'Custom';
+    setTimeout(() => {
+        alert(`✅ Exam loaded successfully!\n📁 File "${filename}" has been downloaded.\n🎯 Starting ${subject} exam...`);
+    }, 500);
+}
 
 // Color customization functionality
 const customizeBtn = document.getElementById('customizeBtn');

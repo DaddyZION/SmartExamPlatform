@@ -1781,6 +1781,130 @@ const EMBEDDED_EXAMS = {
 5.  b) The angle of incidence for which the angle of refraction is 90° || **Explanation:** The critical angle is the angle of incidence in the denser medium for which the angle of refraction is 90°. Beyond this angle, total internal reflection occurs, and no light is transmitted into the less dense medium.
 `,
 
+    "mathematics_exam.md": `# Mathematics Mock Exam
+
+## Section A: Multiple Choice (20 Marks)
+
+1.  What is the value of $x$ in the equation $2x + 3 = 7$?
+    a) $x = 1$
+    b) $x = 2$
+    c) $x = 3$
+    d) $x = 4$
+
+2.  What is the derivative of $f(x) = x^2 + 3x - 1$?
+    a) $f'(x) = 2x + 3$
+    b) $f'(x) = x + 3$
+    c) $f'(x) = 2x - 1$
+    d) $f'(x) = x^2 + 3$
+
+3.  What is the area of a circle with radius $r$?
+    a) $A = 2\\pi r$
+    b) $A = \\pi r^2$
+    c) $A = \\pi r$
+    d) $A = 2\\pi r^2$
+
+4.  Solve for $y$: $\\frac{y}{3} + 2 = 5$
+    a) $y = 6$
+    b) $y = 9$
+    c) $y = 12$
+    d) $y = 15$
+
+5.  What is $\\sqrt{25}$?
+    a) $3$
+    b) $4$
+    c) $5$
+    d) $6$
+
+## Section B: Multiple Choice (30 Marks)
+
+1.  What is the slope of the line passing through points $(1, 2)$ and $(3, 8)$?
+    a) $m = 2$
+    b) $m = 3$
+    c) $m = 4$
+    d) $m = 6$
+
+2.  What is $\\sin(30°)$?
+    a) $\\frac{1}{2}$
+    b) $\\frac{\\sqrt{2}}{2}$
+    c) $\\frac{\\sqrt{3}}{2}$
+    d) $1$
+
+3.  What is the quadratic formula?
+    a) $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+    b) $x = \\frac{-b \\pm \\sqrt{b^2 + 4ac}}{2a}$
+    c) $x = \\frac{b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+    d) $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{a}$
+
+4.  What is $\\log_{10}(100)$?
+    a) $1$
+    b) $2$
+    c) $10$
+    d) $100$
+
+5.  What is the integral of $f(x) = 2x$?
+    a) $F(x) = x^2 + C$
+    b) $F(x) = 2x^2 + C$
+    c) $F(x) = x + C$
+    d) $F(x) = 2 + C$
+
+## Section C: Multiple Choice (50 Marks)
+
+1.  What is the distance between points $(0, 0)$ and $(3, 4)$?
+    a) $d = 5$
+    b) $d = 7$
+    c) $d = \\sqrt{7}$
+    d) $d = \\sqrt{25}$
+
+2.  What is $e^{\\ln(5)}$?
+    a) $1$
+    b) $5$
+    c) $e$
+    d) $\\ln(5)$
+
+3.  What is the sum of the first $n$ natural numbers?
+    a) $S = n(n+1)$
+    b) $S = \\frac{n(n+1)}{2}$
+    c) $S = \\frac{n(n-1)}{2}$
+    d) $S = n^2$
+
+4.  What is $\\cos(0°)$?
+    a) $0$
+    b) $\\frac{1}{2}$
+    c) $\\frac{\\sqrt{3}}{2}$
+    d) $1$
+
+5.  What is the determinant of the matrix $\\begin{pmatrix} 2 & 1 \\\\ 3 & 4 \\end{pmatrix}$?
+    a) $5$
+    b) $8$
+    c) $11$
+    d) $-5$
+
+---
+
+# Answers
+
+## Section A
+1.  b) $x = 2$ || **Explanation:** Solving $2x + 3 = 7$: subtract 3 from both sides to get $2x = 4$, then divide by 2 to get $x = 2$.
+2.  a) $f'(x) = 2x + 3$ || **Explanation:** Using the power rule: the derivative of $x^2$ is $2x$, the derivative of $3x$ is $3$, and the derivative of a constant is $0$.
+3.  b) $A = \\pi r^2$ || **Explanation:** The area of a circle is given by the formula $A = \\pi r^2$, where $r$ is the radius.
+4.  b) $y = 9$ || **Explanation:** Solving $\\frac{y}{3} + 2 = 5$: subtract 2 from both sides to get $\\frac{y}{3} = 3$, then multiply by 3 to get $y = 9$.
+5.  c) $5$ || **Explanation:** $\\sqrt{25} = 5$ because $5^2 = 25$.
+
+## Section B
+1.  b) $m = 3$ || **Explanation:** Using the slope formula $m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{8 - 2}{3 - 1} = \\frac{6}{2} = 3$.
+2.  a) $\\frac{1}{2}$ || **Explanation:** $\\sin(30°) = \\frac{1}{2}$ is a standard trigonometric value.
+3.  a) $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$ || **Explanation:** This is the standard quadratic formula for solving $ax^2 + bx + c = 0$.
+4.  b) $2$ || **Explanation:** $\\log_{10}(100) = 2$ because $10^2 = 100$.
+5.  a) $F(x) = x^2 + C$ || **Explanation:** The integral of $2x$ is $x^2 + C$ using the power rule for integration.
+
+## Section C
+1.  a) $d = 5$ || **Explanation:** Using the distance formula: $d = \\sqrt{(3-0)^2 + (4-0)^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$.
+2.  b) $5$ || **Explanation:** $e^{\\ln(5)} = 5$ because the exponential and natural logarithm functions are inverses.
+3.  b) $S = \\frac{n(n+1)}{2}$ || **Explanation:** This is the formula for the sum of the first $n$ natural numbers.
+4.  d) $1$ || **Explanation:** $\\cos(0°) = 1$ is a standard trigonometric value.
+5.  a) $5$ || **Explanation:** For a 2×2 matrix $\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$, the determinant is $ad - bc = (2)(4) - (1)(3) = 8 - 3 = 5$.
+`,
+
     "psychology_exam.md": `# Psychology Mock Exam
 
 ## Section A: Multiple Choice (20 Marks)

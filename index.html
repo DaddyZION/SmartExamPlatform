@@ -6,6 +6,24 @@
     <title>Smart Exam Platform</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;📚&lt;/text&gt;&lt;/svg&gt;">
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="container">
@@ -54,6 +72,7 @@
                     <option value="history_exam.md">🏛️ History</option>
                     <option value="linguistics_exam.md">🗣️ Linguistics</option>
                     <option value="literature_exam.md">📚 Literature</option>
+                    <option value="mathematics_exam.md">🔢 Mathematics</option>
                     <option value="music_theory_exam.md">🎵 Music Theory</option>
                     <option value="philosophy_exam.md">🤔 Philosophy</option>
                     <option value="physics_exam.md">⚛️ Physics</option>
@@ -91,12 +110,37 @@
                 <p style="text-align: center; margin-bottom: 1.5rem; color: var(--text-secondary);">
                     Use our template with ChatGPT, Claude, or any AI assistant to generate custom exams
                 </p>
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="subjectInput" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
+                        Enter your subject:
+                    </label>
+                    <input type="text" id="subjectInput" placeholder="e.g., Biology, History, Mathematics..." 
+                           style="width: 100%; padding: 0.875rem; background: var(--surface-light); border: 1px solid var(--border); border-radius: var(--border-radius); color: var(--text-primary); font-size: 1rem; font-family: inherit; transition: var(--transition);">
+                </div>
                 <div class="btn-group">
                     <button id="copyTemplateBtn" class="btn btn-secondary">
                         📋 Copy AI Template
                     </button>
                     <button id="openGeminiBtn" class="btn btn-primary">
                         🔗 Open Gemini
+                    </button>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <label for="aiResultInput" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
+                        Paste AI-generated exam content:
+                    </label>
+                    <textarea id="aiResultInput" placeholder="Paste the AI-generated exam content here..." 
+                              style="width: 100%; min-height: 120px; padding: 0.875rem; background: var(--surface-light); border: 1px solid var(--border); border-radius: var(--border-radius); color: var(--text-primary); font-size: 0.9rem; font-family: 'Courier New', monospace; resize: vertical; transition: var(--transition);"></textarea>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                        <span>Supports markdown format with mathematical notation</span>
+                        <span id="charCounter">0 characters</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button id="loadAndSaveBtn" class="btn btn-success w-full">
+                        📝 Load and Save Exam
                     </button>
                 </div>
             </div>

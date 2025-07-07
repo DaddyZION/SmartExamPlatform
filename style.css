@@ -249,6 +249,60 @@ input[type="file"]:focus {
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
+/* Text input styling */
+input[type="text"] {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+input[type="text"]:hover {
+    border-color: var(--border-light);
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+input[type="text"]::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* Textarea styling */
+textarea {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-family: 'Courier New', monospace;
+    transition: var(--transition);
+    resize: vertical;
+}
+
+textarea:hover {
+    border-color: var(--border-light);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+    font-family: inherit;
+}
+
 /* Button styling */
 .btn {
     display: inline-flex;
@@ -293,6 +347,11 @@ input[type="file"]:focus {
 .btn-success {
     background: var(--gradient-secondary);
     color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
 }
 
 .btn-danger {
@@ -586,6 +645,35 @@ input[type="file"]:focus {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-primary);
+}
+
+/* MathJax styling */
+.MathJax {
+    font-size: 1.1em !important;
+}
+
+.MathJax_Display {
+    margin: 0.5em 0 !important;
+}
+
+/* Math in questions and options */
+.question-text .MathJax,
+.option-text .MathJax {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Math in feedback */
+.feedback .MathJax {
+    color: inherit;
+}
+
+.feedback.correct .MathJax {
+    color: var(--success-color);
+}
+
+.feedback.incorrect .MathJax {
+    color: var(--error-color);
 }
 
 /* Utility classes */
