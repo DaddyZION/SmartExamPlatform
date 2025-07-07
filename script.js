@@ -193,11 +193,37 @@ function displayCurrentQuestion() {
 
 // Function to render MathJax
 function renderMathJax() {
-    if (window.MathJax && window.MathJax.typesetPromise) {
-        window.MathJax.typesetPromise([questionContainer, answerContainer]).catch(function (err) {
-            console.log('MathJax rendering error:', err.message);
-        });
+    // Wait for MathJax to be fully loaded
+    const maxRetries = 50; // Maximum 5 seconds (50 * 100ms)
+    let retryCount = 0;
+    
+    function tryRender() {
+        if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+            try {
+                MathJax.typesetPromise([questionContainer, answerContainer]).catch(function (err) {
+                    console.log('MathJax rendering error:', err.message);
+                });
+            } catch (error) {
+                console.log('MathJax typesetPromise error:', error);
+            }
+        } else if (typeof MathJax !== 'undefined' && MathJax.Hub) {
+            // Fallback for older MathJax versions
+            try {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionContainer]);
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, answerContainer]);
+            } catch (error) {
+                console.log('MathJax Hub error:', error);
+            }
+        } else if (retryCount < maxRetries) {
+            // MathJax not loaded yet, retry after a short delay
+            retryCount++;
+            setTimeout(tryRender, 100);
+        } else {
+            console.log('MathJax failed to load after maximum retries');
+        }
     }
+    
+    tryRender();
 }
 
 checkBtn.addEventListener('click', () => {
@@ -789,4 +815,21 @@ resetColorsBtn.addEventListener('click', () => {
 // Initialize color preferences on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadColorPreferences();
+    
+    // Additional MathJax initialization for GitHub Pages compatibility
+    if (typeof MathJax !== 'undefined') {
+        console.log('MathJax available on DOMContentLoaded');
+    } else {
+        console.log('MathJax not yet available on DOMContentLoaded');
+        // Set up a listener for when MathJax loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (typeof MathJax !== 'undefined') {
+                    console.log('MathJax available after window load');
+                } else {
+                    console.log('MathJax still not available after window load');
+                }
+            }, 1000);
+        });
+    }
 });
